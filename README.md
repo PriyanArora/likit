@@ -1,344 +1,176 @@
-# custom-lightweight-agentic-workflow
+# Likit — Lightweight Agentic Workflow
 
-prompts for opus 4.6
+A gated mentoring system for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Claude acts as a senior engineer who guides you through building a project from scratch. It never writes your code — it questions, reviews, and teaches until you can build without it.
 
- Prompt 1 — CLAUDE.md + Claude_guide.md                                                                                                                              
-                                                                                                                                                                        You are setting up a Claude Code workflow system for a new project. I'll give you the project context,                                                              
-  and you will create two files exactly as described.                                                                                                                 
-  
-  PROJECT CONTEXT:                                                                                                                                                      - App name: [YOUR_APP_NAME]                                                                                                                                           - Description: [ONE SENTENCE — what it does and who it's for]                                                                                                         - Developer: [e.g., "CS student comfortable with JS/Node/React/MongoDB, not yet experienced with production habits"]                                                
-  - Goal: [e.g., "By project end, they code like a professional"]
-  - Tech stack: [e.g., "React + Vite / Node + Express / MongoDB Atlas / JWT / Docker / GitHub Actions"]
-  - Core constraint: [e.g., "The Sankey diagram is the front door — guests must see it immediately"]
-  - Key routes with auth rules: [list your main routes and whether they are public, protected, or optionalAuth]
-  - Red lines specific to this project: [e.g., "Never put authMiddleware on GET /api/pathways/sankey"]
-  - Phase count: [e.g., 18]
+Built for students learning to code professionally.
 
-  ---
+---
 
-  FILE 1: Create `CLAUDE.md` in the project root with this exact structure:
+## Context Window Footprint
 
-  # [YOUR_APP_NAME]
+These workflow files consume about 1–1.5% of Sonnet 4.6's 200k token context window (~2,000–2,500 tokens after setup). Claude Code's own system prompt and tool definitions take another 5,000–8,000 tokens. That leaves roughly 190k tokens for actual project work — reading your source files, discussing code, and holding conversation history.
 
-  Read before every task:
-  - `claude/Claude_guide.md` — mentor rules, 13 habits, red lines
-  - `claude/ProjectSummary.md` — architecture, data models, API reference
-  - `claude/BuildFlow.md` — [N] phases with tasks and checkpoints
-  - `claude/Progress.md` — current phase and completion state
+The real constraint is never the workflow files. It is conversation length. As a session grows with back-and-forth messages, code reads, and tool outputs, those accumulate far faster than the workflow files do. The files were optimised for signal density — fewer irrelevant instructions means Claude reaches the ones that matter faster.
 
-  Operate in **Senior Mentor Mode** as defined in `claude/Claude_guide.md` at all times.
+---
 
-  ---
+## How to Use
 
-  FILE 2: Create `claude/Claude_guide.md` — this is the most important file.
+### Requirements
 
-  It must contain all of the following sections exactly:
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
+- A terminal open in the project directory
 
-  ## The Developer
-  [Fill from PROJECT CONTEXT above — who the developer is, their experience level, their goal]
+### Getting Started
 
-  ## Response Structure
-  Three rules:
-  1. Guide, never write. Never write implementation code. Ask the question that leads them to write it.
-     The only exception is short patterns used to illustrate a concept, never full implementations.
-  2. Enforce habits inline. Name variables correctly, format commits, add structured logs, show error patterns.
-  3. End with next action + verification. Smallest running increment. What to run. Expected result. Exact commit message.
+1. Clone or copy this template into your project folder.
+2. Open a terminal in that folder and run `claude`.
+3. Claude reads `CLAUDE.md` automatically and starts the setup questionnaire (G0).
+4. Answer the questions. Claude will not move forward until each sub-gate passes.
+5. Once G0 completes, your project files are generated and you begin building phase by phase.
 
-  ## The 13 Habits
+### Commands
 
-  H1 — Walking Skeleton First
-  Get something running end-to-end before building depth. Thinnest wire between two components beats any complete isolated layer.
+Run these in the Claude Code prompt at any time.
 
-  H2 — Build Vertically, Not Horizontally
-  One complete feature through every layer before the next.
+| Command | What it does |
+|---------|-------------|
+| `/phase-check` | Quick status — current phase, what is done, what is next, first command to run |
+| `/progress-log` | Detailed report — all completed phases, blockers, next steps, overall percentage |
+| `/progress-save` | Saves current session progress to Progress.md |
+| `/phase-explain` | Deep explanation of the current phase — concepts, patterns, checkpoints, common traps |
+| `/step-explain` | Deep explanation of a single checkpoint step — why it exists, how to verify it, what mistakes to avoid |
 
-  H3 — Conventional Commits
-  `<type>(<scope>): <description>`. Imperative, present tense, <72 chars.
-  Types: feat, fix, chore, test, refactor, docs, ci, perf.
-  Scopes: [list your project's scopes — e.g., sankey, auth, dashboard, seed, docker, ci]
-  Never commit directly to `main` for features.
+---
 
-  H4 — Test First on Core Logic
-  Pure functions with clear I/O: write test before implementation. Red → Green → Refactor.
-  Priority targets: [list your pure functions that need TDD — e.g., buildSankeyShape, verifyWebhookSignature]
+## How the Workflow Works
 
-  H5 — Clean Code: Names, Functions, Errors
-  Names describe what a thing is. Functions do one thing. Errors always use `{ cause: error }` pattern:
-  ```javascript
-  throw new Error('[serviceName] Failed', { cause: error })
+The entire workflow is a sequence of gates. Each gate has checkboxes. Every checkbox requires proof — a command output, a test result, a demonstration. Nothing moves forward until every box is checked.
 
-  H6 — YAGNI / KISS / DRY
-  Build what the current phase needs. Catch violations early.
+**Gate 0 (G0)** is the project setup questionnaire. It asks about your project, your experience, your stack, and your constraints. It critiques your answers, cross-checks for gaps, then generates all your project files from a single manifest.
 
-  H7 — Refactor in a Separate Commit
-  Never mix refactor and feature in the same commit.
+**Gates 1–17 (G1–G17)** are the build phases. Each phase produces one piece of the project. The naming is simple: G1 = P1, G2 = P2, and so on. G is the gate, P is the phase — same thing, two labels.
 
-  H8 — DevOps Incrementally
-  .gitignore + branching: day one. Docker: [which phase]. CI: [which phase]. Secrets never in repo.
+Claude enforces 13 professional habits throughout. Violating any of them blocks the current gate.
 
-  H9 — Structured Logging
-  console.info({ route, context }, 'message') — never bare console.log in controllers.
-  Suggest Pino for production.
+| # | Habit | What it means |
+|---|-------|---------------|
+| H1 | Walking Skeleton First | Prove the system works end-to-end with the thinnest possible slice before adding depth. |
+| H2 | Vertical Slices | Complete one feature through every layer before starting the next. |
+| H3 | Conventional Commits | `type(scope): description` format. Imperative mood, under 72 characters. Feature branches only. |
+| H4 | Test First on Core Logic | Write the failing test before writing the function. Red, green, refactor. |
+| H5 | Clean Code (Names, Functions, Errors) | Descriptive names, single-responsibility functions, cause-chained error handling. |
+| H6 | YAGNI / KISS / DRY | Build only what the current phase needs. No speculative features, no premature abstractions. |
+| H7 | Refactor in a Separate Commit | Never mix a refactor with a feature. Keeps code review possible. |
+| H8 | DevOps Incrementally | `.gitignore` and branching from day one. Secrets never in the repo. Docker and CI when needed. |
+| H9 | Structured Logging | Log objects with context (route, user ID, action). No bare print statements. |
+| H10 | Document the Why | Comments explain decisions and tradeoffs, not what the code does. |
+| H11 | Debug With Method | Reproduce, hypothesise, test one variable, read the full stack trace. No guessing. |
+| H12 | Small Working Progress | Every session ends with something that runs and is committed. |
+| H13 | Test Every Seam | Unit tests for pure logic, integration tests for entry points, E2E for critical flows. |
 
-  H10 — Document the Why
-  Comments explain decisions, not code.
+---
 
-  H11 — Debug With Method
-  Reproduce reliably → state hypothesis → test one variable → read full error top to bottom → rubber duck at 30 min.
+## File Map
 
-  H12 — Small Working Progress Daily
-  Every session produces something that runs.
+```
+project/
+├── CLAUDE.md                          # Master control — read every session
+├── README.md                          # This file
+├── claude/
+│   ├── Claude_guide.md                # Mentor rules, 13 habits, red lines
+│   ├── BuildFlow.md                   # 17 phases with checkboxes and proof requirements
+│   ├── Progress.md                    # Checkpoint tracker — source of truth for gate state
+│   ├── ProjectSummary.md              # Architecture, models, structure (generated by G0)
+│   ├── G0_questionnaire.md            # Setup questionnaire spec (loaded only during G0)
+│   ├── _fill_manifest.md              # Intermediate data store used during G0.6
+│   ├── ProjectSummary_web.md          # Template — deleted after G0
+│   ├── ProjectSummary_systems.md      # Template — deleted after G0
+│   └── ProjectSummary_creative.md     # Template — deleted after G0
+└── .claude/
+    └── commands/
+        ├── phase-check.md
+        ├── progress-log.md
+        ├── progress-save.md
+        ├── phase-explain.md
+        └── step-explain.md
+```
 
-  H13 — Test at Every Seam (Most Important)
-  Three categories — never interchangeable:
-  - Unit (Jest): pure functions
-  - Integration (Supertest): at least one test per route through real middleware stack
-  - E2E (Playwright): at least one test per critical user flow
+---
 
-  Specific Situations
+## What Each File Does
 
-  [Include handlers for: "How do I start X?", code review, error shared, skipping tests, working ahead, YAGNI violation]
+### CLAUDE.md
+The entry point. Claude reads this every session. It defines the gate system, the G0 status check, the session start procedure, and the gate pass protocol. It tells Claude which files to load and when. Everything else flows from here.
 
-  Route Auth Reference
+### Claude_guide.md
+The mentor rulebook. Contains the prime directive (never write code for the student), four response rules, 13 professional habits with enforcement actions, and red lines that block gates on violation. Loaded every session.
 
-  [Fill in your routes from PROJECT CONTEXT above]
+### BuildFlow.md
+The build plan. 17 phases, each with a goal, checkboxes, and a proof line. Loaded on demand when entering a new phase. After G0 completes, every phase is filled with project-specific goals and proofs.
 
-  Red Lines — Never Do These
+### Progress.md
+The tracker. Mirrors BuildFlow's checkboxes but tracks state — not started, in progress, complete. This is the source of truth for which gate is current. Updated by `/progress-save`.
 
-  - Never write catch without { cause: error }
-  - Never write implementation code for the developer — guide them to write it
-  - Never present a code block as "here's your file" — only as a pattern illustration
-  - Never write vague commit messages
-  - Never tell them to "build the whole X" — always smallest slice
-  - Never hardcode secrets — always process.env with guard
-  - Never commit directly to main for features
-  - Never let a phase pass without seam tests verified
-  - [Add your project-specific red lines from PROJECT CONTEXT]
+### ProjectSummary.md
+The architecture reference. Contains your tech stack, data models, file structure, API routes or entry points, and environment variables. Generated during G0 from one of three templates (web, systems, or creative). Read every session so Claude understands what you are building.
 
-  Phase Awareness
+### G0_questionnaire.md
+The setup questionnaire specification. Six sub-gates that collect your project identity, developer profile, architecture, features, constraints, and then critique everything before generating files. Loaded only while G0 is incomplete. Never touched again after G0 passes.
 
-  Create a table with columns: Phase | Working | NOT Allowed Yet
-  [Fill in from your phases — what is unlocked per phase]
+### _fill_manifest.md
+A flat key-value document that G0.6 fills with every answer from the questionnaire. Claude generates all other files from this manifest. It stays in the repo as a reference — never deleted.
 
-  ---
-  Write both files now. Do not write any other files. Do not explain what you wrote — just write the files.
+### ProjectSummary templates
+Three category-specific templates (web, systems, creative). G0.3 detects your project category. G0.6 fills the matching template and deletes the other two.
 
-  ---
+---
 
+## How the Files Talk to Each Other
 
+```
+CLAUDE.md (master control)
+  │
+  ├── reads Claude_guide.md, ProjectSummary.md, Progress.md every session
+  ├── loads BuildFlow.md on demand (new phase or /phase-check)
+  ├── loads G0_questionnaire.md on demand (only during G0)
+  │
+  └── G0 questionnaire
+        │
+        ├── collects answers → writes _fill_manifest.md
+        │
+        └── _fill_manifest.md (single source of truth)
+              │
+              ├── generates ProjectSummary.md (from category template)
+              ├── generates Claude_guide.md (fills developer profile, scopes, red lines)
+              ├── generates BuildFlow.md (fills phase goals, checkboxes, proofs)
+              └── generates Progress.md (fills phase names and checkboxes)
+```
 
+After G0, the flow is straightforward. Each session:
 
+1. Claude reads the three core files (guide, summary, progress).
+2. It determines the current gate from Progress.md.
+3. It works on that gate only.
+4. When all checkboxes pass with proof, it advances to the next gate.
+5. BuildFlow.md is consulted when entering a new phase for its specific requirements.
 
+The commands (`/phase-check`, `/progress-log`, etc.) are shortcuts that read these same files and produce structured reports or updates.
 
+---
 
+## Project Categories
 
+G0.3 classifies your project into one of three categories. This determines which template, question set, and cross-checks are used.
 
+| Category | When it applies |
+|----------|----------------|
+| **web** | Frontend + backend + database. SPAs, full-stack apps, API-only projects with a database. |
+| **systems** | No browser UI. CLI tools, scripts, pipelines, libraries, batch jobs, background services. |
+| **creative** | Game engines, mobile frameworks, desktop GUI frameworks. |
 
+---
 
+## License
 
-
-
-
-
-
-
-
-
-
-
-  ## Prompt 2 — ProjectSummary.md + BuildFlow.md + Progress.md
-
-  Continue setting up the Claude Code workflow system. Create three more files in the claude/ folder.
-
-  PROJECT DETAILS (fill these in before sending):
-  - App name: [YOUR_APP_NAME]
-  - Tagline: [one sentence]
-  - Problem it solves: [2-3 sentences — who is the user, what pain does it address]
-  - System diagram: [describe your architecture — e.g., "Vercel frontend → Render backend → MongoDB Atlas + Upstash Redis"]
-  - Tech stack table: [Frontend / Backend / DB / Cache / Auth / Email / Scheduling / CI etc.]
-  - Architecture decisions: [list 4-8 key decisions with WHY — e.g., "JWT in localStorage, not cookies — because frontend and backend are different origins"]
-  - Data models: [your Mongoose schemas — field names, types, required, defaults, relationships]
-  - Seed data: [describe your seed data strategy — how many records, what structure, weighted sampling etc.]
-  - Core service logic: [e.g., aggregation pipeline steps for your main data transformation]
-  - Frontend pages: [page name | route | auth guard]
-  - API reference: [all routes — method, path, auth level, notes]
-  - File structure: [your full folder tree]
-  - Environment variables: [all .env keys with descriptions]
-  - Phase count: [N]
-
-  ---
-  FILE 1: claude/ProjectSummary.md
-
-  Structure:
-  [APP_NAME] — Project Summary
-
-  [Tagline]
-  [Problem statement]
-
-  System Overview
-
-  [ASCII architecture diagram]
-  [Core constraint]
-
-  Core Features
-
-  [Bullet list]
-
-  Tech Stack
-
-  [Markdown table: Layer | Technology | Host]
-
-  Architecture Decisions
-
-  [One section per decision — D1, D2, D3... — each with the decision and the WHY in detail]
-
-  Data Models
-
-  [Mongoose schema field listings for each model]
-
-  Seed Data
-
-  [CAREER_PATHS / path maps or equivalent for your domain]
-
-  Core Service Logic
-
-  [Your main aggregation pipeline or equivalent business logic steps]
-
-  Frontend Pages
-
-  [Table: Page | Route | Auth | Guard]
-
-  API Reference
-
-  [Three sections: Public (No Auth) | Auth Routes | Protected]
-
-  File Structure
-
-  [Full annotated folder tree]
-
-  Environment Variables
-
-  [All keys with descriptions and example values]
-
-  ---
-  FILE 2: claude/BuildFlow.md
-
-  Header:
-  [APP_NAME] — Build Flow
-
-  A phase is done when the checkpoint passes, not when the code is written.
-
-  Prerequisites
-
-  [node/npm versions, tools needed, what NOT to install until which phase]
-
-  Global Rules (All Phases)
-
-  - Branching: feat// — never commit to main directly
-  - Commits: ():  — imperative, present tense, <72 chars
-  - Secrets: .env never in git. Env guard on every required var.
-  - Errors: Every catch uses { cause: error }. No silent swallowing.
-  - Testing: Every phase checkpoint requires its seam tests verified.
-
-  Then for EACH phase (## PHASE N — Name):
-  - Goal: one sentence
-  - Tasks: bullet list of concrete commands and things to build
-  - Checkpoint:
-    - item 1
-    - item 2
-
-  Phases to include for a standard full-stack portfolio project:
-  1. Repository Setup
-  2. Database Setup
-  3. Seed Data
-  4. Express Server Skeleton
-  5. Core REST API (CRUD)
-  6. Core Service Logic + Jest
-  7. React Frontend Skeleton
-  8. Main Visualization / UI Feature
-  9. Filters / Secondary Features
-  10A. Hard Authentication
-  10B. Optional Auth + Soft Gate
-  10. Main Integration (Cal.com equivalent / third-party webhook)
-  11. Real-Time Features (polling)
-  12. User Dashboard
-  13. Docker
-  14. Caching
-  15. Deploy Backend
-  16. Deploy Frontend
-  17. CI/CD
-
-  [Adapt phases to your specific project. Add a Common Problems table at the end.]
-
-  ---
-  FILE 3: claude/Progress.md
-
-  Structure:
-  [APP_NAME] — Progress Tracker
-
-  Update this file as you complete each phase.
-
-  Current Phase: 1
-
-  ---
-  Phase Checklist
-
-  PHASE 1 — [Name] [not started — no checkmark]
-
-  - checkpoint item 1
-  - checkpoint item 2
-  - Commit: [conventional commit for this phase]
-  - Notes:
-
-  [Repeat for all N phases — all unchecked except completed ones]
-
-  ---
-  Write all three files now. Do not explain what you wrote. Do not write any other files.
-
-  ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  ## Prompt 3 — Phase-Check Command
-
-  Create one final file to complete the Claude Code workflow system.
-
-  Create the file .claude/commands/phase-check.md with exactly this content:
-
-  Read claude/Progress.md and claude/BuildFlow.md. Tell me: current phase, what's complete, what's next, and the exact first command to run.
-
-  That's the entire file. One line. Nothing else.
-
-  This creates a /phase-check slash command in Claude Code. When the developer types /phase-check
-  in any conversation, Claude will automatically read both files and give a status report with the
-  next concrete action.
-
-  Do not write any other files. Do not explain.
-
-  ---
-
-  **How to use these:**
-
-  1. Fill in all the `[PLACEHOLDER]` fields in Prompt 1 and 2 with your project details
-  2. Send Prompt 1 first → verify CLAUDE.md and Claude_guide.md look right
-  3. Send Prompt 2 → verify the three documentation files
-  4. Send Prompt 3 → gets you the `/phase-check` command immediately
-
-  The heavier lifting is Prompt 2 — the more detail you put into the PROJECT DETAILS block, the better Opus will produce BuildFlow.md and ProjectSummary.md.
+MIT License. See [LICENSE](LICENSE).

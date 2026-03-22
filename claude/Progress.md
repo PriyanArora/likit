@@ -1,111 +1,113 @@
-# [APP_NAME] — Progress
+# Progress
 
 **Current Gate:** G0 (Project Setup)
 **Current Phase:** —
+**Project Category:** [web / systems / creative — set by G0.3]
 **Last Updated:** [DATE]
 **Session Notes:** [status]
 
-> Gate state: ALL checkboxes must be `[x]` with proof shown to pass a gate.
-> See CLAUDE.md Gate System for rules.
+> Each gate (G) corresponds to a phase (P): G1 = P1, G2 = P2, etc.
+> ALL checkboxes must be `[x]` with proof shown to pass a gate.
 
 ---
 
 ## G0 — Project Setup `[not started]`
 - [ ] G0.1 Identity — all questions answered + confirmed
 - [ ] G0.2 Developer Profile — all questions answered + confirmed
-- [ ] G0.3 Architecture — all questions answered + confirmed
-- [ ] G0.4 Features & Routes — all questions answered + confirmed
+- [ ] G0.3 Architecture + category detected + confirmed
+- [ ] G0.4 Features & Structure — all questions answered + confirmed
 - [ ] G0.5 Constraints & Red Lines — all questions answered + confirmed
-- [ ] G0.6 Critique + cross-check + files generated + user approved
+- [ ] G0.6 Critique + cross-check — all concerns resolved
+- [ ] G0.6 Fill manifest — all fields populated, user confirmed
+- [ ] G0.6 Files generated — ProjectSummary, Claude_guide, BuildFlow, Progress
+- [ ] G0.6 Verification — zero placeholders in any claude/ file
+- [ ] Unused ProjectSummary templates deleted
 
 ---
 
-## G1/P1 — Repo Setup `[locked — requires G0]`
+## P1 — Repo Setup `[locked — requires G0]`
 - [ ] Conventional initial commit
-- [ ] .gitignore complete
-- [ ] Folder structure matches spec
-- [ ] .env.example exists
-- [ ] npm install clean
+- [ ] .gitignore covers secrets, deps, build artifacts
+- [ ] Folder structure matches ProjectSummary
+- [ ] Config/env example file with all keys
+- [ ] Dependencies install cleanly
 
-## G2/P2 — Database `[locked — requires G1]`
-- [ ] Connection with env guard
-- [ ] Models defined
-- [ ] Connection test passes
+## P2 — [Data Layer] `[locked — requires P1]`
+- [ ] [G0.6 fills]
+- [ ] Config from env, not hardcoded
+- [ ] Connection / access test passes
 
-## G3/P3 — Seed `[locked — requires G2]`
-- [ ] Seed populates correctly
-- [ ] Idempotent
-- [ ] Relationships intact
+## P3 — [Data Setup] `[locked — requires P2]`
+- [ ] [G0.6 fills]
+- [ ] Repeatable without side effects
+- [ ] Relationships / references intact
 
-## G4/P4 — Server `[locked — requires G3]`
-- [ ] Starts on port
-- [ ] Health route ok
-- [ ] 404 JSON
+## P4 — [Core Entry Point] `[locked — requires P3]`
+- [ ] [G0.6 fills]
+- [ ] Basic smoke test passes
+- [ ] Error path returns meaningful output
 
-## G5/P5 — CRUD `[locked — requires G4]`
-- [ ] Status codes correct
+## P5 — [Core Logic + Tests] `[locked — requires P4]`
+- [ ] [G0.6 fills]
 - [ ] Integration tests pass
-- [ ] Validation works
+- [ ] Invalid input handled
 
-## G6/P6 — Services `[locked — requires G5]`
-- [ ] Pure services
+## P6 — [Service / Module Extraction] `[locked — requires P5]`
+- [ ] Core logic pure where possible
 - [ ] Unit tests pass
-- [ ] Thin routes
+- [ ] Entry points are thin
 
-## G7/P7 — Frontend `[locked — requires G6]`
-- [ ] Dev server runs
-- [ ] Routing works
-- [ ] API call succeeds
+## P7 — [Interface Skeleton] `[locked — requires P6]`
+- [ ] [G0.6 fills]
+- [ ] Navigates between sections
+- [ ] Connects to core layer
 
-## G8/P8 — Main Feature `[locked — requires G7]`
-- [ ] Real data renders
-- [ ] Loading/error states
-- [ ] MVP styled
+## P8 — [Main Feature] `[locked — requires P7]`
+- [ ] Works with real data
+- [ ] Handles failure gracefully
+- [ ] Meets core constraint
 
-## G9/P9 — Secondary `[locked — requires G8]`
-- [ ] Filters work
-- [ ] Empty states
-- [ ] No errors
+## P9 — [Secondary Features] `[locked — requires P8]`
+- [ ] [G0.6 fills]
+- [ ] Edge cases handled
+- [ ] No regressions
 
-## G10/P10 — Auth `[locked — requires G9]`
-- [ ] Register + token
-- [ ] Login + token
-- [ ] 401 on protected
-- [ ] Optional auth both ways
-- [ ] Frontend guards
-- [ ] Auth tests
+## P10 — [Auth / Access Control] `[locked — requires P9]`
+- [ ] [G0.6 fills]
+- [ ] Unauthorised access rejected
+- [ ] Auth tests pass
 
-## G11/P11 — Integrations `[locked — requires G10]`
-- [ ] End-to-end works
-- [ ] Webhook verified
-- [ ] Failure handled
+## P11 — [Integrations] `[locked — requires P10]`
+- [ ] Works end-to-end
+- [ ] External failure handled
+- [ ] [G0.6 fills verification]
 
-## G12/P12 — Dashboard `[locked — requires G11]`
-- [ ] User-scoped data
-- [ ] No leaks
-- [ ] Load time ok
+## P12 — [User-Scoped View] `[locked — requires P11]`
+- [ ] Data scoped correctly
+- [ ] No cross-context leaks
+- [ ] Acceptable load time
 
-## G13/P13 — Docker `[locked — requires G12]`
-- [ ] Compose up works
-- [ ] Matches local
-- [ ] Clean teardown
+## P13 — [Environment] `[locked — requires P12]`
+- [ ] [G0.6 fills]
+- [ ] Matches earlier phase behaviour
+- [ ] Clean setup and teardown
 
-## G14/P14 — Cache `[locked — requires G13]`
-- [ ] Cache hit faster
+## P14 — [Performance] `[locked — requires P13]`
+- [ ] Measurable improvement shown
 - [ ] Invalidation works
-- [ ] Graceful without cache
+- [ ] Graceful without optimisation layer
 
-## G15/P15 — Deploy Backend `[locked — requires G14]`
-- [ ] Health live
-- [ ] Routes work
-- [ ] Secrets in env
+## P15 — [Deploy — Backend / Core] `[locked — requires P14]`
+- [ ] Live and reachable
+- [ ] Core functionality works in production
+- [ ] Secrets in host env only
 
-## G16/P16 — Deploy Frontend `[locked — requires G15]`
-- [ ] Loads at URL
-- [ ] API connected
-- [ ] Auth works
+## P16 — [Deploy — Frontend / Client] `[locked — requires P15]`
+- [ ] Loads at production target
+- [ ] Connects to production services
+- [ ] Auth / state works in production
 
-## G17/P17 — CI/CD `[locked — requires G16]`
-- [ ] PR triggers tests
+## P17 — [CI/CD] `[locked — requires P16]`
+- [ ] Push triggers tests
 - [ ] Merge deploys
-- [ ] Failed blocks merge
+- [ ] Failed tests block deploy

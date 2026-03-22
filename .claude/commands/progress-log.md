@@ -1,3 +1,5 @@
+Detailed progress report — full project status with blockers and overall completion.
+
 Read claude/Progress.md, claude/BuildFlow.md, and claude/Claude_guide.md.
 
 Report:

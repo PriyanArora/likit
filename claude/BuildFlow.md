@@ -1,138 +1,130 @@
-# [APP_NAME] — Build Flow
+# Build Flow
 
 > Phase done = checkpoint passes, not code written.
-> Every phase is a GATE (see CLAUDE.md). ALL checkboxes + proof required to advance. No skipping.
+> Each phase has a **Proof** line — what the student must demonstrate to pass the gate.
 
 ## Prerequisites
-- Node >= 18, npm >= 9, Git with SSH
-- [DB_TOOL]
-- Docker: NOT until P13 gate unlocks. Playwright: NOT until E2E gate unlocks.
-
-## Global Rules
-- Branch: `feat/<scope>/<name>` — never commit to main
-- Commit: `<type>(<scope>): <desc>` — imperative, <72 chars
-- Secrets: `.env` never in git. Guard every required var.
-- Errors: every `catch` uses `{ cause: error }`
-- Tests: every phase checkpoint requires seam tests verified
-- **GATE RULE:** No checkbox marked without proof shown. No phase advanced without all boxes checked.
+- [FILLED BY G0.6 — tools, versions, what NOT to install until which phase]
 
 ---
 
 ## P1 — Repo Setup `[GATE G1]`
-**Goal:** Clean repo, .gitignore, folder structure, package.json
+**Goal:** Clean repo, .gitignore, folder structure, dependency setup
 - [ ] Conventional initial commit
-- [ ] .gitignore: node_modules, .env, dist, coverage
+- [ ] .gitignore covers build artifacts, secrets, deps
 - [ ] Folder structure matches ProjectSummary
-- [ ] .env.example with all keys
-- [ ] `npm install` clean in all packages
+- [ ] Config/env example file with all keys
+- [ ] Dependencies install cleanly
+**Proof:** `git log --oneline -1` shown. .gitignore contents shown. [G0.6 fills project-specific proof]
 
-## P2 — Database `[GATE G2 — requires G1 passed]`
-**Goal:** Connected DB with validated schemas
-- [ ] Connection config with env guard
-- [ ] All models defined and exporting
-- [ ] Connection test passes
+## P2 — [Data Layer] `[GATE G2 — requires G1]`
+**Goal:** [G0.6 fills]
+- [ ] [G0.6 fills]
+- [ ] Config comes from env, not hardcoded
+- [ ] Connection / access test passes
+**Proof:** [G0.6 fills]
 
-## P3 — Seed Data `[GATE G3 — requires G2 passed]`
-**Goal:** Realistic seed data, idempotent
-- [ ] `npm run seed` populates correctly
-- [ ] Re-run doesn't duplicate
-- [ ] Relationships intact
+## P3 — [Data Setup] `[GATE G3 — requires G2]`
+**Goal:** [G0.6 fills]
+- [ ] [G0.6 fills]
+- [ ] Repeatable without side effects
+- [ ] Relationships / references intact
+**Proof:** [G0.6 fills]
 
-## P4 — Server Skeleton `[GATE G4 — requires G3 passed]`
-**Goal:** Running server, health route, error middleware
-- [ ] Server starts on configured port
-- [ ] GET /api/health returns ok
-- [ ] 404 returns JSON
+## P4 — [Core Entry Point] `[GATE G4 — requires G3]`
+**Goal:** [G0.6 fills]
+- [ ] [G0.6 fills]
+- [ ] Basic health / smoke test passes
+- [ ] Error path returns meaningful output
+**Proof:** [G0.6 fills]
 
-## P5 — Core API (CRUD) `[GATE G5 — requires G4 passed]`
-**Goal:** All CRUD routes + integration tests
-- [ ] Correct status codes on all endpoints
+## P5 — [Core Logic + Tests] `[GATE G5 — requires G4]`
+**Goal:** [G0.6 fills] + integration tests
+- [ ] [G0.6 fills]
 - [ ] Integration tests pass
-- [ ] 400 on invalid input
+- [ ] Invalid input handled correctly
+**Proof:** Full test output shown. All passing.
 
-## P6 — Service Logic + Unit Tests `[GATE G6 — requires G5 passed]`
-**Goal:** Business logic extracted, test-first
-- [ ] Services are pure where possible
+## P6 — [Service / Module Extraction] `[GATE G6 — requires G5]`
+**Goal:** Business logic extracted into testable units, test-first
+- [ ] Core logic is pure where possible
 - [ ] Unit tests pass
-- [ ] Routes are thin (service calls only)
+- [ ] Entry points are thin (delegate to services/modules)
+**Proof:** Unit test output shown. Entry point reviewed — no business logic present.
 
-## P7 — Frontend Skeleton `[GATE G7 — requires G6 passed]`
-**Goal:** App with routing, layout, API layer
-- [ ] Dev server runs
-- [ ] Route navigation works
-- [ ] API health call succeeds from frontend
+## P7 — [Interface Skeleton] `[GATE G7 — requires G6]`
+**Goal:** [G0.6 fills]
+- [ ] [G0.6 fills]
+- [ ] Navigates between primary sections
+- [ ] Connects to core layer successfully
+**Proof:** [G0.6 fills]
 
-## P8 — Main Feature `[GATE G8 — requires G7 passed]`
-**Goal:** Primary user-facing feature with real data
-- [ ] Renders with seed data
-- [ ] Loading + error states
-- [ ] Styled to MVP level
+## P8 — [Main Feature] `[GATE G8 — requires G7]`
+**Goal:** Primary user-facing feature working end-to-end with real data
+- [ ] Works with real data (not stubs)
+- [ ] Handles failure gracefully
+- [ ] Meets core constraint from ProjectSummary
+**Proof:** Feature demonstrated with real data. Failure case shown.
 
-## P9 — Secondary Features `[GATE G9 — requires G8 passed]`
-**Goal:** Filters, search, supporting features
-- [ ] Filters work correctly
-- [ ] Empty states handled
-- [ ] No console errors
+## P9 — [Secondary Features] `[GATE G9 — requires G8]`
+**Goal:** [G0.6 fills]
+- [ ] [G0.6 fills]
+- [ ] Edge cases handled
+- [ ] No regressions in primary feature
+**Proof:** [G0.6 fills]
 
-## P10 — Auth `[GATE G10 — requires G9 passed]`
-**Goal:** Register, login, guards, optional auth
-- [ ] Register returns token
-- [ ] Login returns token
-- [ ] Protected routes 401 without token
-- [ ] Optional auth works both ways
-- [ ] Frontend guards redirect correctly
-- [ ] Auth integration tests pass
+## P10 — [Auth / Access Control] `[GATE G10 — requires G9]`
+**Goal:** [G0.6 fills]
+- [ ] [G0.6 fills]
+- [ ] Unauthorised access rejected
+- [ ] Auth tests pass
+**Proof:** Full auth flow demonstrated. Rejection case shown. Test output shown.
 
-## P11 — Integrations `[GATE G11 — requires G10 passed]`
-**Goal:** External services, webhooks, real-time
-- [ ] Integration works end-to-end
-- [ ] Webhook verification (if applicable)
-- [ ] External failure doesn't crash app
+## P11 — [Integrations] `[GATE G11 — requires G10]`
+**Goal:** [G0.6 fills]
+- [ ] Works end-to-end
+- [ ] Failure of external service handled
+- [ ] [G0.6 fills verification]
+**Proof:** Integration demonstrated. Failure case tested.
 
-## P12 — Dashboard `[GATE G12 — requires G11 passed]`
-**Goal:** User-scoped personalized view
-- [ ] Data scoped to user
-- [ ] No cross-user data leaks
-- [ ] Acceptable load time
+## P12 — [User-Scoped View] `[GATE G12 — requires G11]`
+**Goal:** [G0.6 fills]
+- [ ] Data / state scoped correctly to user or context
+- [ ] No cross-context data leaks
+- [ ] Loads within acceptable time
+**Proof:** Demonstrated with at least two distinct users/contexts.
 
-## P13 — Docker `[GATE G13 — requires G12 passed]`
-**Goal:** Containerized app
-- [ ] `docker compose up` works
-- [ ] Matches local dev behavior
-- [ ] Clean teardown
+## P13 — [Environment] `[GATE G13 — requires G12]`
+**Goal:** [G0.6 fills]
+- [ ] [G0.6 fills]
+- [ ] Matches expected behaviour from earlier phases
+- [ ] Clean setup and teardown
+**Proof:** [G0.6 fills]
 
-## P14 — Caching `[GATE G14 — requires G13 passed]`
-**Goal:** Cache hot paths, invalidate on write
-- [ ] Faster on cache hit
-- [ ] Invalidates on mutation
-- [ ] Graceful without cache
+## P14 — [Performance] `[GATE G14 — requires G13]`
+**Goal:** [G0.6 fills]
+- [ ] Measurable improvement shown
+- [ ] Invalidation / refresh works
+- [ ] Graceful when optimisation layer is absent
+**Proof:** Before/after measurement shown.
 
-## P15 — Deploy Backend `[GATE G15 — requires G14 passed]`
-**Goal:** Production backend running
-- [ ] Health endpoint live
-- [ ] All routes work in prod
-- [ ] Secrets in host env only
+## P15 — [Deploy — Backend / Core] `[GATE G15 — requires G14]`
+**Goal:** [G0.6 fills]
+- [ ] Live and reachable
+- [ ] All core functionality works in production environment
+- [ ] Secrets / config in host env only
+**Proof:** Live access demonstrated. Core function tested in production.
 
-## P16 — Deploy Frontend `[GATE G16 — requires G15 passed]`
-**Goal:** Production frontend connected
-- [ ] Loads at prod URL
-- [ ] API calls reach backend
-- [ ] Auth works in prod
+## P16 — [Deploy — Frontend / Client] `[GATE G16 — requires G15]`
+**Goal:** [G0.6 fills]
+- [ ] Loads / runs at production target
+- [ ] Connects to production backend / services
+- [ ] Auth / state works in production
+**Proof:** Production URL or store listing accessed. End-to-end flow confirmed.
 
-## P17 — CI/CD `[GATE G17 — requires G16 passed]`
-**Goal:** Automated test + deploy
-- [ ] PR triggers tests
-- [ ] Merge triggers deploy
-- [ ] Failed tests block merge
-
----
-
-## Common Problems
-| Problem | Fix |
-|---------|-----|
-| CORS error | Add frontend origin to backend CORS config |
-| DB connection fail | Check IP whitelist + .env URI |
-| JWT malformed | Check `Authorization: Bearer <token>` format |
-| Port in use | `lsof -i :PORT` then kill |
-| Module not found | `npm install` + check import paths |
-| Test timeout | Ensure async calls use await |
+## P17 — [CI/CD] `[GATE G17 — requires G16]`
+**Goal:** Automated test and deploy pipeline
+- [ ] Push triggers test run
+- [ ] Merge to main triggers deploy
+- [ ] Failed tests block deploy
+**Proof:** CI run shown (triggered by PR). Deploy trigger confirmed.
