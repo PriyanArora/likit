@@ -125,6 +125,27 @@ prompts for opus 4.6
 
   ---
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   ## Prompt 2 — ProjectSummary.md + BuildFlow.md + Progress.md
 
   Continue setting up the Claude Code workflow system. Create three more files in the claude/ folder.
@@ -275,6 +296,25 @@ prompts for opus 4.6
   Write all three files now. Do not explain what you wrote. Do not write any other files.
 
   ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   ## Prompt 3 — Phase-Check Command
 
