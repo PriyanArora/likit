@@ -1,5 +1,7 @@
 # Likit - Lightweight Kit for Agentic Workflows
 
+**(The Likit for Codex implementation is maintained in the likit/codex branch.)**
+
 A gated mentoring system for [Claude Code](https://docs.anthropic.com/en/docs/claude-code). Claude acts as a senior engineer who guides you through building a project from scratch. It never writes your code but instead questions, reviews, and teaches until you can build without it.
 
 Before a single line of code is written, Likit builds the entire project architecture through conversation. It asks about your stack, what you know, what you don't, and what the project needs to do. Then it critiques your answers, cross-checks for gaps, and refines the design back and forth until everything is solid. The architecture is not assumed but is negotiated.
