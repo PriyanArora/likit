@@ -30,8 +30,9 @@ Most workflow templates out there are heavy. Thousands of tokens of repeated rul
 1. Clone or copy this template into your project folder.
 2. Open a terminal in that folder and run `claude`.
 3. Claude reads `CLAUDE.md` automatically and starts the setup questionnaire (G0).
-4. Answer the questions. Claude will not move forward until each sub-gate passes.
-5. Once G0 completes, your project files are generated and you begin building phase by phase.
+4. If it doesn't, prompt claude to read CLAUDE.md and begin
+5. Answer the questions. Claude will not move forward until each sub-gate passes.
+6. Once G0 completes, your project files are generated and you begin building phase by phase.
 
 ### Commands
 
