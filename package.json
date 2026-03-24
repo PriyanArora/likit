@@ -1,0 +1,32 @@
+{
+  "name": "likit-claude",
+  "version": "1.0.0",
+  "description": "Claude workflow for student developers with commands and guides",
+  "files": [
+    ".claude/",
+    "claude/",
+    "CLAUDE.md"
+  ],
+  "keywords": [
+  "claude",
+  "claude-code",
+  "anthropic",
+  "ai",
+  "workflows",
+  "commands",
+  "prompts",
+  "agent",
+  "llm",
+  "productivity",
+  "templates",
+  "developer-tools",
+  "student ai workflow",
+  "student",
+  "student ai",
+  "likit"
+  ],
+  "author": "priyan arora",
+  "license": "MIT"
+}
+
+
