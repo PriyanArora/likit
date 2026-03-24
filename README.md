@@ -29,7 +29,7 @@ Most workflow templates out there are heavy. Thousands of tokens of repeated rul
 
 ### Getting Started
 
-1. Clone or copy this template into your project folder.
+1. `npm i likit-claude` or Clone this repository or copy this template into your project folder.
 2. Open a terminal in that folder and run `claude`.
 3. Claude reads `CLAUDE.md` automatically and starts the setup questionnaire (G0).
 4. If it doesn't, prompt claude to read CLAUDE.md and begin
