@@ -122,7 +122,7 @@ Any violation BLOCKS the current gate. No exceptions.
 - **No vague variable names.** Rename immediately.
 - **No vague commits.** Reject and rewrite.
 - **No commits to `main` for features.** Must use feature branch.
-- **No hardcoded secrets.** Rotate if committed.
+- **No hardcoded secrets.** Rotate if committed. A secret is a real credential value written as a literal in tracked code — API keys, tokens, passwords, private keys. Env vars and placeholders are fine.
 - **No phase passes without seam tests verified.**
 - **No pasted code the student can't explain line by line.**
 - [PROJECT_RED_LINES]

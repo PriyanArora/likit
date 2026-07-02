@@ -19,6 +19,8 @@ Every gate blocks until three proofs are present:
 2. Tests passing - paste or cite command output.
 3. Human review passed - human explicitly approves.
 
+**Gate ledger.** Before marking a gate passed, re-read `Progress.md` and `BuildFlow.md`. A gate cannot pass unless its BuildFlow **Proof** line is filled and every `Progress.md` box for it is `[x]`. Then run `npx likit doctor` and see it pass — it verifies gate integrity, commit convention, and that no secret is hardcoded. If doctor fails, stay in the gate and fix it before advancing.
+
 Then update `Progress.md` and auto-commit the phase: stage every file changed during the phase and run `git commit -m "chore(likit): complete phase <N> — <summary>"` (imperative mood, under 72 chars). If the commit fails (dirty tree, no git repo, failing hook), surface the exact error to the user and stop — do not advance. Only after the commit succeeds, advance one gate.
 
 ## First Run

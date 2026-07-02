@@ -16,6 +16,8 @@ Likit is a lightweight, gate-driven AI dev workflow. In Mentored mode, the human
 ## Gate Pass Protocol
 Every gate blocks until all checkboxes are proven. To advance: verify all Progress checkboxes are `[x]`, require passing tests for test-bearing phases, reject hardcoded secrets, then log the pass in `Progress.md`.
 
+**Gate ledger.** Before marking a gate passed, re-read `Progress.md` and `BuildFlow.md`. A gate cannot pass unless its BuildFlow **Proof** line is filled and every `Progress.md` box for it is `[x]`. Then run `npx likit doctor` and see it pass — it verifies gate integrity, commit convention, and that no secret is hardcoded. If doctor fails, stay in the gate and fix it before advancing.
+
 Then auto-commit the phase: stage every file changed during the phase and run `git commit -m "chore(likit): complete phase <N> — <summary>"` (imperative mood, under 72 chars). If the commit fails (dirty tree, no git repo, failing hook), surface the exact error to the user and stop — do not announce the pass or start the next phase. Only after the commit succeeds, announce the gate passed and advance one gate.
 
 ## First Run
