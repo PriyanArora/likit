@@ -35,6 +35,48 @@ function check(label, passed, explanation) {
   return passed ? 1 : 0;
 }
 
+// Gate integrity: if Progress.md claims to be on gate G<N>, every checkbox in an
+// earlier gate section must be [x]. Gate G<k> corresponds to phase P<k>, and G0 is
+// the setup section \u2014 so a section headed "G0" or "P<k>" belongs to gate number k.
+function sectionGate(header) {
+  const g = header.match(/^G(\d+)/);
+  if (g) return Number(g[1]);
+  const p = header.match(/^P(\d+)/);
+  if (p) return Number(p[1]);
+  return null;
+}
+
+function gateIntegrity(cwd) {
+  if (!exists(cwd, 'Progress.md')) return { skip: true };
+  const content = fs.readFileSync(path.join(cwd, 'Progress.md'), 'utf8');
+  const current = content.match(/\*\*Current Gate:\*\*\s*G(\d+)/i);
+  if (!current) return { skip: true };
+  const currentGate = Number(current[1]);
+
+  const violations = [];
+  let gate = null;
+  let label = null;
+  let unchecked = 0;
+  const flush = () => {
+    if (gate !== null && gate < currentGate && unchecked > 0) {
+      violations.push(`${label} has ${unchecked} unchecked box${unchecked > 1 ? 'es' : ''}`);
+    }
+  };
+  for (const line of content.split('\n')) {
+    const heading = line.match(/^##\s+(.+)$/);
+    if (heading) {
+      flush();
+      label = heading[1].split(/[\s\u2014-]/)[0];
+      gate = sectionGate(heading[1]);
+      unchecked = 0;
+    } else if (/^\s*-\s*\[ \]/.test(line)) {
+      unchecked += 1;
+    }
+  }
+  flush();
+  return { skip: false, ok: violations.length === 0, detail: violations.join('; ') };
+}
+
 async function runDoctor({ cwd }) {
   let passed = 0;
   let config = null;
@@ -79,9 +121,19 @@ async function runDoctor({ cwd }) {
   const teamOk = config.teamMode ? teamProgress.length > 0 : true;
   passed += check('team progress files valid', teamOk, 'team mode needs at least one .likit/Progress_*.md file');
 
-  console.log(`${passed}/8 checks passed`);
-  if (passed < 8) {
-    console.log('Suggestion: complete G0, then rerun `npx likit doctor`.');
+  let total = 8;
+
+  console.log('\n— Law checks —');
+
+  const gate = gateIntegrity(cwd);
+  if (!gate.skip) {
+    total += 1;
+    passed += check('gate integrity — earlier gates fully proven', gate.ok, gate.detail);
+  }
+
+  console.log(`\n${passed}/${total} checks passed`);
+  if (passed < total) {
+    console.log('Suggestion: resolve the failures above, then rerun `npx likit doctor`.');
   }
 }
 
