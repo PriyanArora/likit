@@ -53,7 +53,7 @@ Every tool also gets `.likit/config.json` and `.likit/HOW_TO_USE.md`.
 | `npx likit init --dry-run` | Show files without writing |
 | `npx likit start` | Populate planning files from `prompt.md` |
 | `npx likit sync` | Update Likit template files |
-| `npx likit doctor` | Validate setup |
+| `npx likit doctor` | Validate setup and enforce the laws — gate integrity, commit convention, no hardcoded secrets (exits non-zero on any failure) |
 | `npx likit migrate` | Migrate old likit-claude or likit-codex setup |
 | `npx likit session-bundle` | Regenerate paste-ready context |
 | `npx likit export-template` | Export G0 output to `project.likit.json` |
@@ -83,6 +83,15 @@ In Claude Code, Likit installs slash commands under `.claude/commands/` for both
 | `/progress-save` | Persist progress to `Progress.md` |
 | `/session-bundle` | Regenerate paste-ready chat context |
 | `/export-template` | Export G0 output to a reusable template |
+
+## Enforcement
+
+The workflow files instruct the assistant to block gates until proof is shown, but
+`npx likit doctor` makes the core laws checkable rather than trusted: it verifies gate
+integrity (no gate is marked passed while an earlier gate has unchecked boxes), lints
+recent commits against the conventional-commit format, and scans tracked files for
+hardcoded secrets. It exits non-zero on any failure, so you can wire it into a git
+hook or CI. Each gate's advance ritual runs it before committing the phase.
 
 ## Team Mode
 
