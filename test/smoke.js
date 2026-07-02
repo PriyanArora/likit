@@ -85,4 +85,87 @@ for (const [mode, tool, type] of [['mentored', 'claude-code', 'web'], ['vibe', '
   });
 }
 
+console.log('\nDoctor law checks (gate integrity, commit-lint, secret scan)');
+
+function runDoctor(dir) {
+  try {
+    return { out: cli(['doctor'], { cwd: dir }), code: 0 };
+  } catch (error) {
+    return { out: `${error.stdout || ''}${error.stderr || ''}`, code: error.status || 1 };
+  }
+}
+
+function doctorFixture({ progress, files = {}, commitMsg = 'chore: seed fixture' }) {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'likit-doctor-'));
+  fs.mkdirSync(path.join(dir, '.likit'), { recursive: true });
+  fs.writeFileSync(path.join(dir, '.likit', 'config.json'), JSON.stringify({
+    version: '2.0.0', created: '2026-07-02', mode: 'mentored', tool: 'claude-code',
+    projectType: 'web', teamMode: false, username: 'p'
+  }));
+  fs.writeFileSync(path.join(dir, 'Progress.md'), progress);
+  for (const [name, content] of Object.entries(files)) {
+    fs.writeFileSync(path.join(dir, name), content);
+  }
+  const git = (args) => execFileSync('git', args, { cwd: dir, stdio: 'ignore' });
+  git(['init']);
+  git(['config', 'user.email', 'x@x.com']);
+  git(['config', 'user.name', 'x']);
+  git(['add', '-A']);
+  git(['commit', '-m', commitMsg]);
+  return dir;
+}
+
+function withFixture(opts, fn) {
+  const dir = doctorFixture(opts);
+  try {
+    fn(dir);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+
+const GATE5_DIRTY = '# Progress\n**Current Gate:** G5\n\n## G0 — Setup\n- [x] a\n## P3 — Data\n- [x] schema\n- [ ] seed\n## P5 — Core\n- [ ] current\n';
+const GATE5_CLEAN = '# Progress\n**Current Gate:** G5\n\n## G0 — Setup\n- [x] a\n## P3 — Data\n- [x] schema\n- [x] seed\n## P5 — Core\n- [ ] current\n';
+
+check('gate integrity flags an unproven earlier gate', () => {
+  withFixture({ progress: GATE5_DIRTY }, (dir) => {
+    const { out, code } = runDoctor(dir);
+    assert.match(out, /✗ gate integrity/);
+    assert.match(out, /P3/);
+    assert.strictEqual(code, 1);
+  });
+});
+
+check('gate integrity passes when earlier gates are proven', () => {
+  withFixture({ progress: GATE5_CLEAN }, (dir) => {
+    assert.match(runDoctor(dir).out, /✓ gate integrity/);
+  });
+});
+
+check('commit-lint flags an off-convention commit', () => {
+  withFixture({ progress: GATE5_CLEAN, commitMsg: 'WIP messy' }, (dir) => {
+    assert.match(runDoctor(dir).out, /✗ commit convention/);
+  });
+});
+
+check('commit-lint passes a conventional commit', () => {
+  withFixture({ progress: GATE5_CLEAN, commitMsg: 'feat(seed): add fixture' }, (dir) => {
+    assert.match(runDoctor(dir).out, /✓ commit convention/);
+  });
+});
+
+check('secret scan flags a hardcoded key', () => {
+  withFixture({ progress: GATE5_CLEAN, files: { 'app.js': 'const api_key = "sk_live_9x82hfALZ0qwerty";\n' } }, (dir) => {
+    const { out, code } = runDoctor(dir);
+    assert.match(out, /✗ no hardcoded secrets/);
+    assert.strictEqual(code, 1);
+  });
+});
+
+check('secret scan ignores env refs and placeholders', () => {
+  withFixture({ progress: GATE5_CLEAN, files: { 'app.js': 'const k = process.env.API_KEY;\nconst x = "your_api_key_here";\n' } }, (dir) => {
+    assert.match(runDoctor(dir).out, /✓ no hardcoded secrets/);
+  });
+});
+
 console.log(`\n${passed} checks passed${process.exitCode ? ' (with failures above)' : ''}`);
