@@ -1,0 +1,3 @@
+Run a Vibe architecture audit of the current plan and code.
+
+Read `ProjectSummary.md`, `BuildFlow.md`, `_fill_manifest.md`, and the code produced so far. Audit for: architectural contradictions, decisions that conflict with the stated constraints, missing tests on test-bearing phases, scope creep, and secret/config handling that breaks the red lines. Report findings as a numbered list with severity and a concrete fix for each. The human owns architecture — surface issues and recommend, do not silently re-architect. End with: "Approve, adjust, or reject each before advancing."

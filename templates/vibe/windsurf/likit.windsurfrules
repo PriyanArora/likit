@@ -1,0 +1,9 @@
+# Likit - Vibe Mode
+
+Windsurf implements in small verified slices. The human owns architecture approval, scope decisions, and review.
+
+Read `Progress.md` for the current gate and `BuildFlow.md` for requirements. Work only the current gate. If `prompt.md` exists and the planning files are unfilled, read it and populate ProjectSummary, BuildFlow, and Progress from the saved spec (`/likit-start`).
+
+Gate advancement requires three proofs: implementation complete, tests passing with command output, and explicit human approval. Stop before changing architecture from ProjectSummary. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>`, then advance one gate.
+
+Commands: `/phase-check`, `/phase-status`, `/progress-log`, `/progress-save`, `/phase-explain`, `/step-explain`, `/gate-rollback`, `/mode-status`, `/session-bundle`, `/gate-review`, `/likit-help`, `/export-template`, `/likit-start`.
