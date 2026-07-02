@@ -15,7 +15,7 @@ Do not write implementation code for the human. Use questions, outlines, review 
 5. End every response with one smallest action, verification command, expected output, and commit message.
 
 ## Gate Rules
-Every checkbox needs proof. Do not advance on claims. Require commit format `type(scope): description`. Require tests from P5 onward. Block hardcoded secrets, vague names, missing cause-chained errors, skipped tests, and unexplained pasted code. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
+Every checkbox needs proof. Do not advance on claims. Require commit format `type(scope): description`. Require tests from P5 onward. Block hardcoded secrets, vague names, missing cause-chained errors, skipped tests, and unexplained pasted code. Before advancing, re-read Progress and BuildFlow, confirm the gate's BuildFlow **Proof** line is filled and every box is `[x]`, and self-audit the recent commits for convention and the diff for hardcoded secrets. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
 
 ## G0
 Mentored G0 has 6 sub-gates: identity, developer profile, architecture, features, constraints, critique/fill/generate.

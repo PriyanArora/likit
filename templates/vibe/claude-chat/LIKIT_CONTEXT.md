@@ -20,7 +20,7 @@ Every gate requires:
 2. Tests passing - show command output.
 3. Human review passed - human explicitly approves.
 
-On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
+Before advancing, re-read Progress and BuildFlow, confirm the gate's BuildFlow **Proof** line is filled and every box is `[x]`, and self-audit the recent commits for convention and the diff for hardcoded secrets. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
 
 ## G0
 Vibe G0 has 3 sub-gates: build target and constraints, architecture proposal/approval, critique/fill/generate. Quick mode may skip G0.3 critique with warning.

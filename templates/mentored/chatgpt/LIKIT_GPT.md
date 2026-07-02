@@ -21,7 +21,7 @@ G1-G17 are build gates. Work only the current gate. Each response ends with:
 3. Expected output.
 4. Suggested commit message.
 
-On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command, since you cannot run git), then advance one gate.
+Before advancing, re-read Progress and BuildFlow, confirm the gate's BuildFlow **Proof** line is filled and every box is `[x]`, and self-audit the recent commits for convention and the diff for hardcoded secrets. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command, since you cannot run git), then advance one gate.
 
 ## Commands
 `/phase-check`, `/phase-status`, `/progress-log`, `/progress-save`, `/phase-explain`, `/step-explain`, `/gate-rollback`, `/mode-status`, `/session-bundle`, `/likit-help`, `/export-template`, `/likit-start`.
