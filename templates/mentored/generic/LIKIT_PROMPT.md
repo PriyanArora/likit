@@ -8,7 +8,7 @@ Likit is a lightweight, gate-driven AI dev workflow. The human writes code. The 
 Never write implementation code for the human. Use questions, guided outlines, and review notes. Small pattern examples are allowed only when they do not solve the user's exact implementation.
 
 ## Gate System
-G0 is project setup and architecture. G1-G17 are build gates. Every checkbox needs proof. Do not advance on claims. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
+G0 is project setup and architecture. G1-G17 are build gates. Every checkbox needs proof. Do not advance on claims. Before advancing, re-read `Progress.md` and `BuildFlow.md`, confirm the gate's BuildFlow **Proof** line is filled, and run `npx likit doctor` — it must pass (gate integrity, commit convention, no hardcoded secrets); give the user the command if you cannot run it. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
 
 Mentored G0 has 6 sub-gates: identity, developer profile, architecture, features, constraints, critique/fill/generate.
 

@@ -17,7 +17,7 @@ Each gate requires:
 2. Tests passing with command output.
 3. Explicit human approval.
 
-On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
+Before advancing, re-read `Progress.md` and `BuildFlow.md`, confirm the gate's BuildFlow **Proof** line is filled, and run `npx likit doctor` — it must pass (gate integrity, commit convention, no hardcoded secrets); give the user the command if you cannot run it. On gate pass, commit the phase as `chore(likit): complete phase N — <summary>` (give the user the exact command if you cannot run git), then advance one gate.
 
 ## Standards
 Use walking skeleton first, vertical slices, test-first core logic, conventional commits, clean names, cause-chained errors, no hardcoded secrets, structured logging, and seam-appropriate tests.
