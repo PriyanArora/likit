@@ -1,5 +1,6 @@
 const fs = require('node:fs');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 
 const { TOOL_ENTRY, readConfig } = require('./generator');
 
@@ -44,6 +45,31 @@ function sectionGate(header) {
   const p = header.match(/^P(\d+)/);
   if (p) return Number(p[1]);
   return null;
+}
+
+// Commit-lint (Habit H3): recent commit subjects must match the conventional-commit
+// convention and stay under 72 chars. Merge/Revert commits are exempt.
+const COMMIT_RE = /^(feat|fix|chore|test|refactor|docs|ci|perf)(\([^)]+\))?!?: .+/;
+
+function commitLint(cwd) {
+  let log;
+  try {
+    log = execFileSync('git', ['log', '--format=%s', '-n', '20'], {
+      cwd,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore']
+    });
+  } catch {
+    return { skip: true }; // not a git repo / no commits yet
+  }
+  const subjects = log.split('\n').map((s) => s.trim())
+    .filter((s) => s && !/^(Merge|Revert)\b/.test(s));
+  const bad = subjects.filter((s) => !COMMIT_RE.test(s) || s.length > 72);
+  return {
+    skip: subjects.length === 0,
+    ok: bad.length === 0,
+    detail: bad.length ? `${bad.length} of ${subjects.length} off-convention, e.g. "${bad[0].slice(0, 50)}"` : ''
+  };
 }
 
 function gateIntegrity(cwd) {
@@ -129,6 +155,12 @@ async function runDoctor({ cwd }) {
   if (!gate.skip) {
     total += 1;
     passed += check('gate integrity — earlier gates fully proven', gate.ok, gate.detail);
+  }
+
+  const commits = commitLint(cwd);
+  if (!commits.skip) {
+    total += 1;
+    passed += check('commit convention — recent commits well-formed', commits.ok, commits.detail);
   }
 
   console.log(`\n${passed}/${total} checks passed`);
