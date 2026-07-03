@@ -2,6 +2,22 @@
   "name": "likit",
   "version": "2.0.0",
   "description": "Lightweight AI dev workflow kit. One install. Gate-driven. Works with any major AI tool.",
+  "author": "Priyan Arora <priyanarora22@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PriyanArora/likit.git"
+  },
+  "homepage": "https://github.com/PriyanArora/likit#readme",
+  "bugs": {
+    "url": "https://github.com/PriyanArora/likit/issues"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "templates/",
+    "README.md",
+    "LICENSE"
+  ],
   "bin": {
     "likit": "./bin/likit.js"
   },
