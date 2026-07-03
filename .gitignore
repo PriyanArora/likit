@@ -1,6 +1,3 @@
-# Maintainer-only deploy notes (copy out, then delete)
-HOW_LIKIT_WORKS_AND_DEPLOY.md
-
 node_modules/
 *.tgz
 .env
