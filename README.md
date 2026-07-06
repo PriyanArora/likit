@@ -1,18 +1,29 @@
-# Likit
+<p align="center">
+  <img src="https://raw.githubusercontent.com/PriyanArora/likit/main/image.png" alt="Likit logo" width="340">
+</p>
 
-Lightweight, gate-driven AI dev workflow kit. One install, works with the major AI coding tools.
+<p align="center">
+  <b>Lightweight, gate-driven AI dev workflow kit.</b><br>
+  One install. Small steps, real proof, no skipping.
+</p>
 
-Likit gives your AI assistant a disciplined way to build software: one small, provable step at a time, with checkpoints it is not allowed to skip. It installs a few Markdown files into your project plus a tiny command-line tool that keeps everyone honest. It stays entirely local to your repo. It is not a framework, a hosted product, or a heavyweight methodology.
+<p align="center">
+  <a href="https://www.npmjs.com/package/likit"><img src="https://img.shields.io/npm/v/likit?color=2f81f7&label=npm" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/likit"><img src="https://img.shields.io/npm/dm/likit?color=2f81f7" alt="npm downloads"></a>
+  <img src="https://img.shields.io/badge/works%20with-7%20AI%20tools-2f81f7" alt="works with 7 AI tools">
+  <img src="https://img.shields.io/badge/modes-mentored%20%7C%20vibe-2f81f7" alt="modes">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"></a>
+</p>
 
-## What it is (in plain terms)
+---
 
-Picture building a house with an inspector who won't let you start the walls until the foundation passes inspection. Likit is that inspector for software.
+Likit gives your AI assistant a disciplined way to build software: one small, provable step at a time, with checkpoints it is not allowed to skip. It installs a few Markdown files into your project plus a tiny CLI that keeps everyone honest. Everything stays local to your repo. It is not a framework, a hosted product, or a heavyweight methodology.
+
+Think of building a house with an inspector who won't let you start the walls until the foundation passes inspection. Likit is that inspector for software:
 
 - Your project is split into **phases** (foundation, plumbing, wiring, and so on).
-- Each phase ends at a **gate**. A gate has a checklist and a **proof**, something you actually run or show to prove the phase works.
+- Each phase ends at a **gate**. A gate has a checklist and a **proof**: something you actually run or show to prove the phase works.
 - The AI may only work on the **current** gate. It cannot jump ahead, and it cannot mark a gate done on your word alone. The proof has to be real.
-
-The whole idea: small steps, real proof, no skipping.
 
 ## Install
 
@@ -28,7 +39,7 @@ npx likit init
 
 Requires Node.js. Current version: **2.0.0**.
 
-## How you use it, start to finish
+## Quick start
 
 1. **Install.** `npm i likit`. The banner prints; the wizard runs if your terminal is interactive.
 2. **Set up.** `npx likit init`. The wizard asks four questions (mode, AI tool, project type, solo or team), then writes the right files for your tool. It also adds `.env` to your `.gitignore` so secrets are not committed by accident.
@@ -45,7 +56,7 @@ You pick one during setup.
 | **Mentored** | You | Learning and practice. The AI acts as a senior mentor: it questions, reviews, and refuses to write your implementation code, making you prove you understand each step. |
 | **Vibe** | The AI | Faster shipping. The AI implements; you own the architecture and review. Each gate needs implementation, passing tests, and your explicit approval. |
 
-## Platforms
+## Supported tools
 
 Likit adapts its files to whichever AI tool you choose at install time.
 
@@ -87,6 +98,7 @@ Gates run from **G0** to **G17**. Each build gate `G<n>` corresponds to phase `P
 **G1 to G17, Build gates.** A typical path: repo setup, data layer, core entry point, core logic plus tests, feature work, auth, integrations, performance, deploy, CI/CD. Each phase's goal and proof are tailored to your project during G0.
 
 **Advancing a gate (the ritual):**
+
 1. Every checkbox for the gate is `[x]`, and tests pass on test-bearing phases.
 2. Gate ledger: the AI re-reads `Progress.md` and `BuildFlow.md`, confirms the phase's **Proof** line is filled, and runs `npx likit doctor`, which must pass.
 3. The AI auto-commits the phase with a `chore(likit): complete phase <N>` message.
@@ -109,6 +121,7 @@ The workflow files instruct the AI to obey the gate system and the laws, but ins
 **Setup checks:** your `.likit/config.json` is complete, the entry file and `guide.md` exist, `BuildFlow.md` is filled (no leftover placeholders), `Progress.md` and `ProjectSummary.md` exist, no unused `ProjectSummary_*` templates remain, and (in team mode) each developer has a progress file.
 
 **Law checks:**
+
 - **Gate integrity:** no gate is marked passed while an earlier gate still has unchecked boxes. Catches jumping ahead.
 - **Commit convention:** the last 20 commit subjects match the conventional-commit format (`type(scope): description`, under 72 chars).
 - **No hardcoded secrets:** a scan of tracked files for obvious credential leaks (AWS keys, private-key headers, quoted `password`/`api_key`/`token` values), skipping environment references and placeholders.
@@ -136,7 +149,7 @@ The workflow files instruct the AI to obey the gate system and the laws, but ins
 
 `init` also takes flags for scripted setup: `--mode <mentored|vibe>`, `--tool <claude-code|codex-cli|claude-chat|chatgpt|cursor|windsurf|generic>`, `--type <web|systems|creative>`, `--solo`/`--team` (with `--username <name>`), `--force` to overwrite existing Likit files, and `--quick` to skip the Vibe-mode architecture critique.
 
-## Slash commands (Claude Code)
+### Slash commands (Claude Code)
 
 In Claude Code, Likit installs these under `.claude/commands/` for both modes:
 
@@ -176,10 +189,10 @@ Likit stays lean so it does not crowd out your project in the AI's context. CLI 
 |---|---|
 | `bin/likit.js` | CLI entry point, routes commands |
 | `src/*.js` | CLI implementation (`wizard`, `generator`, `doctor`, `start`, `sync`, `bundle`, `migrate`, `template`, `banner`) |
-| `templates/<mentored|vibe>/<tool>/` | The Markdown workflow files, per mode and tool |
+| `templates/<mentored\|vibe>/<tool>/` | The Markdown workflow files, per mode and tool |
 | `.likit/` | Created inside a user's project at init (config plus guide) |
 | `test/smoke.js` | `npm test`: CLI checks, a full mode x tool x type generation sweep, and the `doctor` law checks |
 
 ## License
 
-MIT
+[MIT](LICENSE)
