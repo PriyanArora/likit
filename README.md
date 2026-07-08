@@ -8,8 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/likit"><img src="https://img.shields.io/npm/v/likit?color=2f81f7&label=npm" alt="npm version"></a>
-  <a href="https://www.npmjs.com/package/likit"><img src="https://img.shields.io/npm/dm/likit?color=2f81f7" alt="npm downloads"></a>
+  <img src="https://img.shields.io/npm/v/likit-spec?color=2f81f7&label=npm" alt="npm version">
   <img src="https://img.shields.io/badge/works%20with-7%20AI%20tools-2f81f7" alt="works with 7 AI tools">
   <img src="https://img.shields.io/badge/modes-mentored%20%7C%20vibe-2f81f7" alt="modes">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="MIT license"></a>
