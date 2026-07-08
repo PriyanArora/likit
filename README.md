@@ -28,7 +28,7 @@ Think of building a house with an inspector who won't let you start the walls un
 ## Install
 
 ```bash
-npm i likit
+npm i likit-spec
 ```
 
 On install Likit prints a banner and, in an interactive terminal, starts the setup wizard. In a non-interactive environment (like CI) run setup yourself:
@@ -41,7 +41,7 @@ Requires Node.js. Current version: **2.0.0**.
 
 ## Quick start
 
-1. **Install.** `npm i likit`. The banner prints; the wizard runs if your terminal is interactive.
+1. **Install.** `npm i likit-spec`. The banner prints; the wizard runs if your terminal is interactive.
 2. **Set up.** `npx likit init`. The wizard asks four questions (mode, AI tool, project type, solo or team), then writes the right files for your tool. It also adds `.env` to your `.gitignore` so secrets are not committed by accident.
 3. **Describe your project.** Right after the wizard, Likit asks you to paste or describe your full project spec and saves it to `prompt.md` at the repo root.
 4. **Build the plan.** `npx likit start` (or `/likit-start` in tools with slash commands). Likit reads `prompt.md` and fills `ProjectSummary.md`, `BuildFlow.md`, and `Progress.md` from that spec.
